@@ -1,5 +1,7 @@
 package com.imsosoft.kotlinflow
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.delay
@@ -80,5 +82,39 @@ class MyViewModel: ViewModel() {
 
          */
     }
+
+
+
+    // LiveData vs StateFlow vs SharedFlow
+
+    // LiveData
+    private val _liveData = MutableLiveData("LiveData")
+    val liveData: LiveData<String> = _liveData
+
+    fun updateLiveData() {
+        _liveData.value = "LiveData Updated"
+    }
+
+
+    // StateFlow
+    private val _stateFlow = MutableStateFlow("StateFlow")
+    val stateFlow = _stateFlow.asStateFlow()
+
+    fun updateStateFlow() {
+        _stateFlow.value = "StateFlow Updated"
+    }
+
+
+    // SharedFlow
+    private val _sharedFlow = MutableSharedFlow<String>()
+    val sharedFlow = _sharedFlow.asSharedFlow()
+
+    fun updateSharedFlow() {
+        viewModelScope.launch {
+            _sharedFlow.emit("SharedFlow Updated")
+
+        }
+    }
+
 
 }
