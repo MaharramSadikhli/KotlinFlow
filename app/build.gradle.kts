@@ -34,13 +34,13 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "19"
+        jvmTarget = "17"
     }
     buildFeatures {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.22"
+        kotlinCompilerExtensionVersion = "1.5.10"
     }
     packaging {
         resources {
