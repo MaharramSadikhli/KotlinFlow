@@ -16,13 +16,20 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.imsosoft.kotlinflow.ui.theme.KotlinFlowTheme
+import com.imsosoft.kotlinflow.view.FirstScreen
+import com.imsosoft.kotlinflow.view.SecondScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,9 +39,28 @@ class MainActivity : ComponentActivity() {
             KotlinFlowTheme {
 
                 val viewModel by viewModels<MyViewModel>()
+                val navController = rememberNavController()
 
-                //FirstScreen(viewModel = viewModel)
-                SecondScreen(viewModel = viewModel)
+                NavHost(navController = navController, startDestination = "firstScreen") {
+
+                    composable(route = "firstScreen") {
+                        val time by viewModel.statefulCounter.collectAsStateWithLifecycle()
+
+                        FirstScreen(time = time) {
+                            navController.navigate("secondScreen")
+                        }
+
+                    }
+
+                    composable(route = "secondScreen") {
+                        SecondScreen()
+                    }
+
+                }
+
+                //ThirdScreen(viewModel = viewModel)
+                //FourthScreen(viewModel = viewModel)
+
 
             }
         }
@@ -42,7 +68,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun FirstScreen(viewModel: MyViewModel) {
+fun ThirdScreen(viewModel: MyViewModel) {
 
     val counter = viewModel.countDownTimer.collectAsState(initial = 10)
 
@@ -56,7 +82,7 @@ fun FirstScreen(viewModel: MyViewModel) {
 
 
 @Composable
-fun SecondScreen(viewModel: MyViewModel) {
+fun FourthScreen(viewModel: MyViewModel) {
 
     val liveDataValue = viewModel.liveData.observeAsState()
     val stateFlowValue = viewModel.stateFlow.collectAsState()

@@ -117,4 +117,15 @@ class MyViewModel: ViewModel() {
     }
 
 
+    // make stateful flow
+    val statefulCounter = flow {
+        var count = 10
+        while (true) {
+            delay(1000L)
+            println("flow working")
+            emit(count++)
+        }
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), 0)
+
+
 }
